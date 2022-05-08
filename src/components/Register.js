@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-//import * as React from 'react';
+import '../App.css'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -14,28 +14,37 @@ class Register extends Component {
             name: '',
             lastname: '',
             msg: '',
+            caregiver: false
         }
 
 
     }
 
     handleChange = (e) => {
-        //console.log([e.target.id],e.target.value)
+        //Setting each input into whatever the user types in
         this.setState({ [e.target.id]: e.target.value })
     }
+
+    // Once the user clicks submit:
     handleClick = async () => {
-        const { email, password, name, lastname } = this.state
+        const { email, password, name, lastname, caregiver } = this.state
         if (name.trim().length == 0 || lastname.trim().length == 0) {
-            this.setState({ msg: 'name or last name are require' })
+            this.setState({ msg: '*Name and last name are required' })
+            return;
+        } else if (password.length == 0) {
+            this.setState({ msg: '*Password must have at least one character' })
+            return;
+        } else if (email.length == 0) {
+            this.setState({ msg: '*Must enter a valid email address' })
             return;
         }
-        //sendint it to the server. the server is in between of the front end and the database
         try {
             const response = await axios.post(`http://localhost:5050/register`, {
                 email,
                 password,
                 name,
-                lastname
+                lastname,
+                caregiver
             })
             console.log(response.data.message)
             this.setState({ msg: response.data.message })
@@ -44,14 +53,18 @@ class Register extends Component {
         }
 
     }
+    handleCaregiver = (e)=>{
+        this.setState({caregiver:!this.state.caregiver})
+    }
 
     render() {
+      
         return (
             <>
 
-               <h1>Register</h1>
+                <h1 className='register-login'> Register</h1>
 
-                <>
+                <div className='register-login'>
                     <Box
                         component="form"
                         sx={{
@@ -62,13 +75,19 @@ class Register extends Component {
                     >
                         <TextField id="name" label="Name" variant="outlined" color="secondary" onChange={this.handleChange} />
                         <TextField id="lastname" label="Last name" variant="outlined" color="secondary" onChange={this.handleChange} />
-                        <TextField id="email" label="Email" variant="outlined"color="secondary" onChange={this.handleChange} />
+                        <TextField id="email" label="Email" variant="outlined" color="secondary" onChange={this.handleChange} />
                         <TextField id="password" label="Password" variant="outlined" type='password' color="secondary" onChange={this.handleChange} />
+                        <div>
+                            <input type="checkbox" onChange={this.handleCaregiver}></input>
+                            <label>I am a caregiver</label>
+                        </div>
                         <Button color="secondary" onClick={this.handleClick}>Register!</Button>
+                        <div className='register-login'>{this.state.msg}</div>
                     </Box>
-                    
-                    <div>{this.state.msg}</div> 
-                </>
+
+
+
+                </div>
             </>
 
         );

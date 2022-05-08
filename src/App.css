@@ -2,3 +2,121 @@
   display: flex;
   flex-direction: row;
 }
+
+.MuiBox-root{
+  display: flex;
+  flex-direction: column;
+}
+.register-login{
+  display: flex;
+  justify-content: center;
+}
+
+.divPosts{
+  border: 1px dotted gray;
+  display: flex;
+  padding: 7px;
+  border-radius:5px;
+  margin: 5px;
+
+}
+.divPostsOther {
+  border: 1px dotted gray;
+  padding: 7px;
+  border-radius:5px;
+  width: 500px;
+  margin: 5px;
+}
+
+.divGeneralProfile{
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+
+}
+
+.appbar{
+  display: flex;
+  flex-direction: row;
+}
+
+.logoutButton{
+  display: flex;
+  justify-content: flex-end;
+  
+}
+
+.profile{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+
+
+
+
+
+
+
+/* --------HOME--------- */
+
+.homeGeneral{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+.home{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10%;
+  width: 50%;
+
+
+}
+
+.peopleYouMayKnow{
+  display: flex;
+  flex-direction: column;
+  width: 18%;
+  margin-top: 40px;
+  
+  
+}
+
+.textArea{
+  width: 200px;
+}
+.textfield{
+  width: 150%;
+}
+.homeInside{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.homeInsideInside{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 180%;
+}
+
+.otherUsers{
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 5px;
+  border-radius: 5px;
+  
+  
+}
+
+
+img{
+  clip-path: circle();
+}

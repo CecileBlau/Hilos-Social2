@@ -1,5 +1,4 @@
 import './App.css';
-// import React, { Component } from 'react';
 import React, { useState, useEffect } from 'react';
 import Home from './components/Home'
 import Login from './components/Login'
@@ -9,8 +8,10 @@ import axios from 'axios'
 import { Route, Link, Routes } from "react-router-dom";
 import OtherFriendsPosts from './components/OtherFriendsPosts'
 import { useNavigate } from 'react-router-dom'
-import { Auth } from './auth/Auth'
-import { ToastContainer } from 'react-toastify';
+import ResponsiveAppBar from './components/ResponsiveAppBar'
+import Button from '@mui/material/Button';
+import BottomNavigation from '@mui/material/BottomNavigation';
+
 
 function App() {
   const [post, setPost] = useState('')
@@ -20,20 +21,35 @@ function App() {
   const [allPosts, setAllPosts] = useState('')
   const [name, setName] = useState(null)
   const [lastname, setLastname] = useState(null)
+  const [caregiver, setCaregiver] = useState(null)
+  const [feelings, setFeelings] = useState([])
   let navigate = useNavigate()
+  const [value, setValue] = React.useState('one');
 
+  const handleChangeNav = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const handleChange = (e) => {
-    setPost(e.target.value)
+    if (e.target.value.length > 1) {
+      setPost(e.target.value)
+    }
+
 
   }
 
-  const setUserEmail = (email, name, lastname) => {
+  const setUserEmail = (email, name, lastname, caregiver) => {
     setUser_email(email)
     setName(name)
     setLastname(lastname)
-    console.log('try name', name)
+    setCaregiver(caregiver)
+    console.log('try caregiver', caregiver)
 
+  }
+
+  const sendFeelingsToHome = ( feelings) =>{
+    setFeelings(feelings)
+    console.log('feelings', feelings)
   }
 
 
@@ -49,11 +65,15 @@ function App() {
         setNeedToLoginMessage(response.data.message)
 
       } else {
-        navigate('/profile')
-        console.log(response.data[0])
-        setNeedToLoginMessage('')
-        setText(response.data[0].tweet)
-        setAllPosts(response.data[0])
+        if (response.data[0].tweet.length > 0) {
+          navigate('/profile')
+          console.log(response.data[0])
+          setNeedToLoginMessage('')
+          setText(response.data[0].tweet)
+          setAllPosts(response.data[0])
+        }else{
+          console.log('test')}
+
 
       }
     } catch (error) {
@@ -76,12 +96,35 @@ function App() {
   return (
 
     <>
+      <ResponsiveAppBar user_email={user_email} />
+
+      {/* <Box sx={{ width: '100%' }}>
+        <Tabs
+          value={value}
+          onChange={handleChangeNav}
+          textColor="secondary"
+          indicatorColor="secondary"
+          aria-label="secondary tabs example"
+        >
+          <Tab value="one" label="Home"  component={Link} to="/" />
+          <Tab value="two" label="Login" component={Link} to="/login"/>
+          <Tab value="three" label="Register" component={Link} to="/register"/>
+          <Tab value="four" label="My Profile" component={Link} to="/profile" />
+          <Tab value="five" label="Logout"  component={Link} to="/profileOther/:useremail"/>
+          <App/>
+        </Tabs>
+      </Box> */}
+
+
+
+
+
       <div >
-        {
+        {/* {
           user_email ?
             <ul className='navList' >
               <li style={{ listStyleType: "none" }}>
-                <Link to="/">Home</Link>
+                <Link to="/home">Home</Link>
               </li>
               <li style={{ listStyleType: "none" }}>
                 <Link to="/login">Login</Link>
@@ -104,17 +147,21 @@ function App() {
                 <Link to="/register">Register</Link>
               </li>
             </ul>
-        }
-
+        } */}
+        <div className='logoutButton'>
+          <Button onClick={handleLogout} color='secondary' >Logout</Button>
+        </div>
         <Routes>
-          <Route path="/" element={<Home handleClick={handleClick} handleChange={handleChange} text={text} post={post} user_email={user_email} needToLoginMessage={needToLoginMessage} text={text} />} />
+          <Route path="/home" element={<Home handleClick={handleClick} handleChange={handleChange} text={text} post={post} user_email={user_email} needToLoginMessage={needToLoginMessage} text={text} feelings={feelings}/>} />
+          <Route path="/" element={<Home handleClick={handleClick} handleChange={handleChange} text={text} post={post} user_email={user_email} needToLoginMessage={needToLoginMessage} text={text} feelings={feelings} />} />
           <Route path="/login" element={<Login setUserEmail={setUserEmail} />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile text={text} user_email={user_email} name={name} lastname={lastname} />} />
+          <Route path="/profile" element={<Profile text={text} user_email={user_email} name={name} lastname={lastname} caregiver={caregiver} sendFeelingsToHome={sendFeelingsToHome}/>} />
           <Route path="/profileOther/:useremail" element={<OtherFriendsPosts user_email={user_email} />} />
         </Routes>
 
       </div>
+      <BottomNavigation />
     </>
   );
 
